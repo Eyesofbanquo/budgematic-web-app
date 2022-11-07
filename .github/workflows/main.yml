@@ -3,8 +3,6 @@ name: Budgematic CI
 on:
   push:
     branches: [master]
-    tags:
-      - '[0-9]+\.[0-9]+\.[0-9]+'
   pull_request:
     branches: [master]
 
@@ -40,17 +38,16 @@ jobs:
           cmd: danger ci
         env:
           GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
-  release:
-    if: github.ref_type == 'tag'
+
+  deploy:
+    runs-on: ubuntu-lateset
     needs: build
-    runs-on: 'ubuntu-latest'
+    if: github.ref == 'refs/heads/master'
 
     steps:
-      - name: Automatic release
-        uses: 'marvinpinto/action-automatic-releases@latest'
+      - name: Release
+        uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
         with:
-          repo_token: = "${{ secrets.GITHUB_TOKEN }}"
-          prerelease: false
-          files: |
-            LICENSE.txt
-            *.jar
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: 'budgematic-web' #Must be unique in Heroku
+          heroku_email: 'ms79723@gmail.com'
