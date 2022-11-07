@@ -12,6 +12,7 @@ module.exports = {
     project: ['./tsconfig.json'],
     sourceType: 'module',
   },
+  ignorePatterns: ['.eslintrc.js', 'config.js'],
   rules: {
     '@typescript-eslint/no-unused-vars': 'error',
     '@typescript-eslint/no-floating-promises': 'off',
