@@ -40,7 +40,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
 
   deploy:
-    runs-on: ubuntu-lateset
+    runs-on: ubuntu-latest
     needs: build
     if: github.ref == 'refs/heads/master'
 
