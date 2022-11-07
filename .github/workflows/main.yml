@@ -3,6 +3,8 @@ name: Budgematic CI
 on:
   push:
     branches: [master]
+    tags:
+      - 'v*'
   pull_request:
     branches: [master]
 
@@ -38,3 +40,17 @@ jobs:
           cmd: danger ci
         env:
           GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
+  release:
+    if: github.ref_type == 'tag'
+    needs: build
+    runs-on: 'ubuntu-latest'
+
+    steps:
+      - name: Automatic release
+        uses: 'marvinpinto/action-automatic-releases@latest'
+        with:
+          repo_token: = "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          files: |
+            LICENSE.txt
+            *.jar
