@@ -5,7 +5,9 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
+    "prod-build": "tsc -p tsconfig.production.json",
     "start": "yarn build && node ./dist/index.js",
+    "prod-start": "yarn prod-build && node ./dist/index.js",
     "migrate:up": "npx sequelize-cli db:migrate",
     "lint": "eslint --ignore-path .eslintignore --ext .js,.ts .",
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
