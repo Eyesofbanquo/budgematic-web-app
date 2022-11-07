@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 import Express, { json } from 'express'
 import sequelizeConnection from './db/config'
 import Article, { ArticleMap } from './models/Article'
@@ -6,7 +8,8 @@ const app = Express()
 app.use(json())
 
 app.get('/', async (request, response) => {
-    response.send("Hello! World >:)")
+    const test_message = process.env.TEST_MESSAGE
+    response.send(test_message)
 })
 
 app.get('/articles', async (request, response) => {
@@ -17,7 +20,7 @@ app.get('/articles', async (request, response) => {
 
 if (process.env.PORT) {
     app.listen(process.env.PORT, () => {
-        console.debug("Listening")
+        console.debug('Listening @ localhost:3000')
     })
 } else {
     app.listen(3000, () => console.debug('Listening @ localhost:3000'))
