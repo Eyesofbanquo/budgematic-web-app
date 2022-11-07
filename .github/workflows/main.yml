@@ -28,6 +28,10 @@ jobs:
         uses: borales/actions-yarn@v3.0.0
         with:
           cmd: lint
+      - name: Run Tests
+        uses: borales/actions-yarn@v3.0.0
+        with:
+          cmd: test
       - name: Run Danger
         uses: borales/actions-yarn@v3.0.0
         with:
