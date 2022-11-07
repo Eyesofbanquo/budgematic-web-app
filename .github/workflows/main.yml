@@ -20,9 +20,17 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - uses: borales/actions-yarn@v3.0.0
+      - name: Install Dependencies
+        uses: borales/actions-yarn@v3.0.0
         with:
           cmd: install
-      - uses: borales/actions-yarn@v3.0.0
+      - name: Run Linter
+        uses: borales/actions-yarn@v3.0.0
         with:
           cmd: lint
+      - name: Run Danger
+        uses: borales/actions-yarn@v3.0.0
+        with:
+          cmd: danger ci
+        env:
+          GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
