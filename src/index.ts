@@ -1,11 +1,14 @@
+/* eslint-disable import/first */
+require('dotenv').config()
+
 import Express, { json } from 'express'
 import sequelizeConnection from './db/config'
 import Article, { ArticleMap } from './models/Article'
-
-require('dotenv').config()
+import { router as BudgetLimitRouter } from './routes/budgetlimits'
 
 const app = Express()
 app.use(json())
+app.use(BudgetLimitRouter)
 
 app.get('/', (request, response) => {
   const testMessage = process.env.TEST_MESSAGE
