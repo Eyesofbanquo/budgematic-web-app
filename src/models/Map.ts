@@ -2,6 +2,7 @@ import { Sequelize, DataTypes } from 'sequelize'
 import Budget from './Budget'
 import { uuidv4 } from 'uuid'
 import BudgetLimit from './BudgetLimit'
+import User from './User'
 
 export const Map = (sequelize: Sequelize) => {
   BudgetLimit.init(
@@ -21,6 +22,9 @@ export const Map = (sequelize: Sequelize) => {
       goalId: {
         type: DataTypes.UUID,
       },
+      // userId: {
+      //   type: DataTypes.UUID,
+      // },
     },
     {
       sequelize,
@@ -38,9 +42,6 @@ export const Map = (sequelize: Sequelize) => {
         allowNull: false,
         primaryKey: true,
       },
-      limitId: {
-        type: DataTypes.UUID,
-      },
       date: {
         type: DataTypes.DATE,
       },
@@ -53,6 +54,30 @@ export const Map = (sequelize: Sequelize) => {
     }
   )
 
+  User.init(
+    {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        allowNull: false,
+        primaryKey: true,
+      },
+      deviceId: {
+        type: DataTypes.STRING,
+      },
+    },
+    {
+      sequelize,
+      modelName: 'user',
+      tableName: 'users',
+      timestamps: false,
+    }
+  )
+
+  Budget.beforeCreate(users => {
+    users.id = uuidv4()
+  })
+
   Budget.beforeCreate(budget => {
     budget.id = uuidv4()
   })
@@ -61,9 +86,17 @@ export const Map = (sequelize: Sequelize) => {
     limit.limitId = uuidv4()
   })
 
+  /* Create associations */
+  User.hasMany(Budget, { foreignKey: 'userId' }) // user knows what budget it has by relating to budget's id
+  Budget.belongsTo(User, { foreignKey: 'userId', as: 'users' })
+
+  BudgetLimit.belongsTo(User, { foreignKey: 'userId', as: 'user' })
+
+  /* Add budget - budgetlimit relationship */
   Budget.hasMany(BudgetLimit, { foreignKey: 'budgetId' })
   BudgetLimit.belongsTo(Budget, { foreignKey: 'budgetId', as: 'limits' })
 
-  BudgetLimit.sync()
   Budget.sync()
+  User.sync()
+  BudgetLimit.sync()
 }

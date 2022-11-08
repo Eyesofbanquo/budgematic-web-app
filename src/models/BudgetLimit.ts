@@ -5,4 +5,5 @@ export default class BudgetLimit extends Model {
   public budgetId!: string
   public categoryId!: string
   public goalId!: string
+  public userId!: string
 }
