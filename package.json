@@ -25,7 +25,8 @@
     "pg-hstore": "^2.3.4",
     "prettier": "^2.7.1",
     "sequelize": "^6.25.4",
-    "typescript": "*"
+    "typescript": "*",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@types/chai": "^4.3.3",

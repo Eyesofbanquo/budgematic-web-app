@@ -1,14 +1,11 @@
 import { Router, json } from 'express'
-import sequelizeConnection from '../db/config'
-import BudgetLimit, { BudgetLimitMap } from '../models/BudgetLimit'
+import BudgetLimit from '../models/BudgetLimit'
 
 export const router = Router()
 router.use(json())
 
-BudgetLimitMap(sequelizeConnection)
-
 router.get('/limits', async (request, response) => {
-  const result = await BudgetLimit.findAll()
+  const result = await BudgetLimit.findAll({ include: ['limits'] })
 
   /* fetch category using id */
   /* fetch budget using id */
