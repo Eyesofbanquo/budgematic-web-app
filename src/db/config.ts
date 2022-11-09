@@ -8,9 +8,15 @@ const dbPassword = process.env.DB_PASSWORD
 console.log(`${dbName} - name`)
 console.log(`${dbUser} - name`)
 
-const sequelizeConnection = new Sequelize(dbName, dbUser, dbPassword, {
-  host: dbHost,
-  dialect: 'postgres',
-})
+const databaesURL = process.env.DATABASE_URL ?? null
+let sequelizeConnection
+if (databaesURL !== null) {
+  sequelizeConnection = new Sequelize(databaesURL)
+} else {
+  sequelizeConnection = new Sequelize(dbName, dbUser, dbPassword, {
+    host: dbHost,
+    dialect: 'postgres',
+  })
+}
 
 export default sequelizeConnection
