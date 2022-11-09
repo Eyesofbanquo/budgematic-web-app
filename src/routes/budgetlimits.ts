@@ -5,7 +5,10 @@ export const router = Router()
 router.use(json())
 
 router.get('/limits', async (request, response) => {
-  const result = await BudgetLimit.findAll({ include: ['limits'] })
+  const result = await BudgetLimit.findAll({
+    attributes: ['limitId', 'categoryId'],
+    include: ['budget', 'user', 'goal'],
+  })
 
   /* fetch category using id */
   /* fetch budget using id */

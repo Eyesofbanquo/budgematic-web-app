@@ -1,12 +1,12 @@
-import { Sequelize, DataTypes, Model } from 'sequelize'
+import { Sequelize, DataTypes } from 'sequelize'
 import Budget from './Budget'
-import { uuidv4 } from 'uuid'
+import { uuid } from 'uuidv4'
 import BudgetLimit from './BudgetLimit'
 import User from './User'
 import Goal from './Goal'
 import Source from './Source'
 
-export const Map = (sequelize: Sequelize) => {
+export const Map = async (sequelize: Sequelize) => {
   BudgetLimit.init(
     {
       limitId: {
@@ -19,14 +19,14 @@ export const Map = (sequelize: Sequelize) => {
         type: DataTypes.UUID,
       },
       categoryId: {
-        type: DataTypes.UUID,
+        type: DataTypes.STRING,
       },
       goalId: {
         type: DataTypes.UUID,
       },
-      // userId: {
-      //   type: DataTypes.UUID,
-      // },
+      userId: {
+        type: DataTypes.UUID,
+      },
     },
     {
       sequelize,
@@ -43,6 +43,9 @@ export const Map = (sequelize: Sequelize) => {
         defaultValue: DataTypes.UUIDV4,
         allowNull: false,
         primaryKey: true,
+      },
+      userId: {
+        type: DataTypes.UUID,
       },
       date: {
         type: DataTypes.DATE,
@@ -138,44 +141,47 @@ export const Map = (sequelize: Sequelize) => {
   )
 
   User.beforeCreate(item => {
-    item.id = uuidv4()
+    item.id = uuid()
   })
 
   Budget.beforeCreate(item => {
-    item.id = uuidv4()
+    item.id = uuid()
   })
 
   Goal.beforeCreate(item => {
-    item.id = uuidv4()
+    item.id = uuid()
   })
 
   Source.beforeCreate(item => {
-    item.id = uuidv4()
+    item.id = uuid()
   })
 
   BudgetLimit.beforeCreate(item => {
-    item.limitId = uuidv4()
+    item.limitId = uuid()
   })
+
+  await Budget.sync()
+  await User.sync()
+  await BudgetLimit.sync()
+  await Goal.sync()
+  await Source.sync()
 
   /* Create associations */
   User.hasMany(Budget, { foreignKey: 'userId' }) // user knows what budget it has by relating to budget's id
   Budget.belongsTo(User, { foreignKey: 'userId', as: 'users' })
+
   BudgetLimit.belongsTo(User, { foreignKey: 'userId', as: 'user' })
   Source.belongsTo(User, { foreignKey: 'userId', as: 'user' })
 
   Goal.belongsTo(User, { foreignKey: 'userId', as: 'user' })
+
+  BudgetLimit.hasOne(Goal, { foreignKey: 'limitId', as: 'goal' })
   Goal.belongsTo(BudgetLimit, { foreignKey: 'limitId', as: 'limit' })
 
-  Budget.hasMany(Source, { foreignKey: 'budgetId' })
-  Source.belongsTo(Budget, { foreignKey: 'budgetId', as: 'sources' })
+  Budget.hasMany(Source, { foreignKey: 'budgetId', as: 'sources' })
+  Source.belongsTo(Budget, { foreignKey: 'budgetId', as: 'budget' })
 
   /* Add budget - budgetlimit relationship */
-  Budget.hasMany(BudgetLimit, { foreignKey: 'budgetId' })
-  BudgetLimit.belongsTo(Budget, { foreignKey: 'budgetId', as: 'limits' })
-
-  Budget.sync()
-  User.sync()
-  BudgetLimit.sync()
-  Goal.sync()
-  Source.sync()
+  Budget.hasMany(BudgetLimit, { foreignKey: 'budgetId', as: 'limits' })
+  BudgetLimit.belongsTo(Budget, { foreignKey: 'budgetId', as: 'budget' })
 }
