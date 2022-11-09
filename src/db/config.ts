@@ -11,7 +11,7 @@ console.log(`${dbUser} - name`)
 const databaesURL = process.env.DATABASE_URL ?? null
 let sequelizeConnection
 if (databaesURL !== null) {
-  sequelizeConnection = new Sequelize(databaesURL)
+  sequelizeConnection = new Sequelize(databaesURL, { dialect: 'postgres' })
 } else {
   sequelizeConnection = new Sequelize(dbName, dbUser, dbPassword, {
     host: dbHost,
