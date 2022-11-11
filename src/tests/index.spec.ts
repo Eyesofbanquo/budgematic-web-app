@@ -1,3 +1,6 @@
+/* eslint-disable import/first */
+require('dotenv').config()
+
 import { expect } from 'chai'
 import 'mocha'
 import { Sequelize } from 'sequelize'
@@ -9,8 +12,7 @@ import Budget from '../models/Budget'
 import BudgetLimit from '../models/BudgetLimit'
 import Source from '../models/Source'
 import Goal from '../models/Goal'
-
-// var mSequelize = sinon.mock(Sequelize)
+import { uuid } from 'uuidv4'
 
 describe('This', () => {
   describe('Should', () => {
@@ -19,6 +21,23 @@ describe('This', () => {
     })
   })
 })
+
+if (process.env.NODE_ENV === 'test') {
+  describe('CI test', () => {
+    before(async () => {
+      await Map(sequelizeConnection)
+    })
+
+    describe('Build CD tables', () => {
+      it('should build ci tables and test user', async () => {
+        const deviceId = uuid()
+        await User.create({ deviceId }).then(user => {
+          expect(user.deviceId).to.equal(deviceId)
+        })
+      })
+    })
+  })
+}
 
 describe('Database init', () => {
   let mSequelize

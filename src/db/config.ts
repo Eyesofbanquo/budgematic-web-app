@@ -17,6 +17,13 @@ if (databaesURL !== null) {
       ssl: { require: true, rejectUnauthorized: false },
     },
   })
+} else if (process.env.NODE_ENV === 'test') {
+  console.log('created')
+  console.log(process.env.POSTGRES_HOST)
+  sequelizeConnection = new Sequelize('postgres', 'postgres', 'postgres', {
+    host: process.env.POSTGRES_HOST,
+    dialect: 'postgres',
+  })
 } else {
   sequelizeConnection = new Sequelize(dbName, dbUser, dbPassword, {
     host: dbHost,

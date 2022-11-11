@@ -12,7 +12,8 @@
     "migrate:down": "yarn build && npx sequelize-cli db:migrate:undo",
     "lint": "eslint --ignore-path .eslintignore --ext .js,.ts .",
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
-    "test": "yarn build && mocha dist/tests/**/*.js"
+    "test": "yarn build && mocha dist/tests/**/*.js",
+    "ci-test": "NODE_ENV=test yarn build && mocha dist/tests/**/*.js"
   },
   "dependencies": {
     "@types/express": "^4.17.14",
