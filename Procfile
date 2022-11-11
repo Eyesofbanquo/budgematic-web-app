@@ -1,1 +1,1 @@
-web: npm run prod-start
+web: yarn build && yarn migrate:up && npm run prod-start
