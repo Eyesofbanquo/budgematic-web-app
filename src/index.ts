@@ -14,6 +14,8 @@ import Goal, { createGoal } from './models/Goal'
 
 Map(sequelizeConnection).then()
 
+console.log('Database intiialized...')
+
 const app = Express()
 app.use(json())
 app.use(BudgetLimitRouter)
