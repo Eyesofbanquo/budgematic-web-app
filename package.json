@@ -8,7 +8,8 @@
     "prod-build": "tsc -p tsconfig.production.json",
     "start": "yarn build && node ./dist/index.js",
     "prod-start": "yarn prod-build && node ./dist/index.js",
-    "migrate:up": "npx sequelize-cli db:migrate",
+    "migrate:up": "yarn build && npx sequelize-cli db:migrate",
+    "migrate:down": "yarn build && npx sequelize-cli db:migrate:undo",
     "lint": "eslint --ignore-path .eslintignore --ext .js,.ts .",
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
     "test": "yarn build && mocha dist/tests/**/*.js"
