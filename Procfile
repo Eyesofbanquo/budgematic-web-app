@@ -1,1 +1,1 @@
-web: yarn build && yarn migrate:up && npm run prod-start
+web: yarn prod-build && npx sequelize-cli db:migrate && npm run prod-start
